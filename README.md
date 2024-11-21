@@ -1,38 +1,37 @@
-# Règles
+# Skyjo_L3_miage_POO
+Skyjo
+## Règles :
+Le jeu se joue à deux joueurs ou plus.
 
-Le jeu se joue à au moins deux joueurs et comporte un maitre du jeu non joueur.
+## Mise en place :
+Tous les joueurs ont une grille de 4 par 3 cartes(12 cartes), où toutes les cartes sont face cachée.
+Une carte est d’office posée dans la défausse face visible.
 
-## Mise en place
+## Déroulé de la partie :
+Les joueurs commencent par retourner 2 cartes de leur choix dans leur jeu et celui dont la somme (des 2 cartes) est la plus grande commence. 
+Le premier joueur a le choix entre prendre la dernière carte de la défausse(face visible) ou piocher une carte de la pioche face cachée. 
 
-Chaque joueur reçoit un nombre déterminé de cartes tirées aléatoirement, qu'il garde face cachée.
+Si le joueur décide de prendre la carte face visible de la défausse, il peut remplacer une carte de son jeu(au choix parmi toutes ses cartes, face visible et face cachée comprises), la carte remplacer se retrouve alors face visible dans la défausse.
 
-## Déroulé de la partie
+Si le joueur décide de piocher, alors il regarde la carte et peut : 
+la défausser auquel cas il doit retourner une carte de son jeu pour la rendre visible
+remplacer une carte de son jeu par celle pioché, dans ce cas la carte remplacer fini dans la défausse face visible
 
-Les joueurs sont répartis dans l'ordre d'arrivée. Chaque joueur affronte le prochain dans un duel, à tour de rôle (le dernier joueur affronte le premier). Si un joueur n'a plus de carte, il perd la partie et ne peut plus joueur.
+C’est ensuite au joueur suivant (qui a les mêmes possibilités).
 
-### Déroulé des duels
+## Règles Spéciales : 
+Un joueur peut réaliser une “colonne”, c'est-à- dire avoir trois cartes identiques dans la même colonne. La colonne est ainsi supprimée et est mise en haut de la défausse.
 
-* Lors d'un duel, chacun de joueur joue une carte de sa pile. Le joueur ayant joué la carte de plus haute valeur l'emporte et met sous sa pile les cartes jouées, en les mélangeant.
-* Si les deux joueurs ont joué une carte de même valeur, le duel recommence en accumulant les cartes jouées de telle sorte à ce que le gagnant empoche la totalité des cartes du duel.
+Une manche se finit quand un joueur a tout son jeu face visible. Si un joueur finit et qu’il n’a pas strictement le plus petit nombre de points, son nombre de points est alors doublé. 
+Quand un joueur a révélé sa dernière carte, tous les autres joueurs ont un dernier tour de jeu. 
 
-## Fin de la partie
+Le nombre de points est égale à la somme des nombres affichés sur les cartes.
 
-Le gagnant est le dernier joueur en lice.
+Une partie est terminée quand un joueur atteint ou dépasse les 100 points(souvent après plusieurs manches).
+Le joueur avec le plus petit score gagne la partie.
 
-### Détail des classes principales
-
-Un exemple de jeu supportant le réseau
-
-* LocalWarGame la version du jeu supportant le jeu en local
-* WarGameEngine le moteur du jeu
-* WarGameNetorkPlayer le joueur distant en cas de partie réseau
-* WarGameNetworkEngine la version du jeu supportant le réseau
-
-
-# Protocole réseau
-
-> Le protocole réseau définit les séquences des commandes échangées entre les différentes parties prenantes. Il doit contenir, pour chaque commande, l'expéditeur, le destinataire, le nom de la commande et le contenu du corps de la commande.
-
-![protocole](doc/protocle.png)
-
-
+## Détail du jeu :
+Un jeux comporte 
+5 fois : -2
+15 fois : 0
+10 fois : -1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
