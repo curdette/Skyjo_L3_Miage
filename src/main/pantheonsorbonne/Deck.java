@@ -21,17 +21,17 @@ public class Deck {
         for (Valeur val : Valeur.values()){
             if (val.getValeur()==-2){
                 for (int i=0; i<nbMoinsDeux; i++){
-                    pioche.add(SkyjoCard(val));
+                    pioche.add(new SkyjoCard(val));
                 }
             }
             else if (val.getValeur()==0){
                 for (int i=0; i<nbZero; i++){
-                    pioche.add(SkyjoCard(val));
+                    pioche.add(new SkyjoCard(val));
                 }
             }
             else{
                 for (int i=0; i<nbCarteClassique; i++){
-                    pioche.add(SkyjoCard(val));
+                    pioche.add(new SkyjoCard(val));
                 }
             }
         }
