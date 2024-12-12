@@ -2,7 +2,7 @@ package fr.pantheonsorbonne.miage.skyjo2;
 import java.util.Deque;
 import java.util.LinkedList;
 
-public class Poubelle {
+public class Poubelle { //
     Deque<SkyjoCard> poubelle;
      
     public Poubelle(Deck d){
@@ -18,8 +18,8 @@ public class Poubelle {
         return poubelle.peek();
     }
 
-    public void ajouterCarte(SkyjoCard carte){
-        poubelle.push(carte);
+    public void addCard(SkyjoCard card){
+        poubelle.push(card);
     }
 
 }

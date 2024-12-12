@@ -1,7 +1,5 @@
 package fr.pantheonsorbonne.miage.skyjo2;
 
-//import paquet.Valeur;
-
 public class SkyjoCard {
 
     private Valeur valeur;
@@ -17,5 +15,6 @@ public class SkyjoCard {
     public String toString(){
         return valeur.toString();
     }
+    //todo implémenter equals
 
 }

@@ -5,17 +5,17 @@ import java.util.Random;
 
 
 public abstract class Player {
-    Main main;
+    Hand main;
     List<SkyjoCard[]> mainConnu=new ArrayList<>();
     Random rd = new Random();
     Deck d;
-    Poubelle p;
+    Poubelle poubelle;
 
 
     public Player(Deck d,Poubelle p){
         this.d=d;
-        this.p=p;
-        this.main=new Main(d);
+        this.poubelle=p;
+        this.main=new Hand(d);
         this.mainConnu=initialiserMainConnu();
     }
 
@@ -23,8 +23,8 @@ public abstract class Player {
     private List<SkyjoCard[]> initialiserMainConnu() {
         List<SkyjoCard[]> mainConnu = new ArrayList<>();
         for (int i=0; i<4;i++){
-            SkyjoCard[] colonne=new SkyjoCard[3];
-            mainConnu.add(i,colonne);
+            SkyjoCard[] column=new SkyjoCard[3];
+            mainConnu.add(i,column);
         }
         for (int k=0;k<2;k++){
             int i= rd.nextInt(0,4);
@@ -34,11 +34,11 @@ public abstract class Player {
         return mainConnu; 
     }
 
-    public int nbCarteConnue(){
+    public int nbKnownCard(){
         int nb=0;
-        for (SkyjoCard[] colonne : mainConnu){
-            for (SkyjoCard carte : colonne){
-                if (carte != null){
+        for (SkyjoCard[] column : mainConnu){
+            for (SkyjoCard card : column){
+                if (card != null){
                     nb+=1;
                 }
             }
@@ -47,17 +47,17 @@ public abstract class Player {
     }
     
     
-    public void rendreVisibleCarte(int i, int j){
-        this.mainConnu.get(i)[j]=this.main.getCard(i, j);
+    public void showCard(int numColumn, int index){
+        this.mainConnu.get(numColumn)[index]=this.main.getCard(numColumn, index);
     }
 
-    public SkyjoCard remplacerCarte(int i, int j, SkyjoCard carteRemplacante){
-        this.mainConnu.get(i)[j]=carteRemplacante;
-        return this.main.remplacerCarte(i,j,carteRemplacante);
+    public SkyjoCard replaceCard(int numColumn, int index, SkyjoCard carteRemplacante){
+        this.mainConnu.get(numColumn)[index]=carteRemplacante;
+        return this.main.remplacerCarte(numColumn,index,carteRemplacante);
         
     }
 
-    public int isSameCard(SkyjoCard card){
+    public int getColumnIndexSameCard(SkyjoCard card){
         int maxNb=0;
         int numColumnMax=-1;
         for (int i =0; i<mainConnu.size();i++){
@@ -72,30 +72,11 @@ public abstract class Player {
     public int cardOccurenceColumn(SkyjoCard card, SkyjoCard[] column){
         int nbSameCard=0;
         for (SkyjoCard c : column){
-            if(c.equals(card)){
+            if(c.getValeur()==card.getValeur()){
                 nbSameCard+=1;
             }
         }
         return nbSameCard;
-    }
-
-    
-
-    public int isEmpty(SkyjoCard[] column){
-        if(column[0]==null){
-            return 0;
-        }
-        else if(column[1]==null){
-            return 1;
-        }
-        else if(column[2]==null){
-            return 2;
-        }
-        return -1;
-    }
-
-    public void chooseTrashDeck(SkyjoCard card){
-
     }
 
     
