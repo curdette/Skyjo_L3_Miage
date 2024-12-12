@@ -8,7 +8,7 @@ public class SmartPlayer extends Player{
 
     public void chooseKeepOrNotTrash(SkyjoCard card){//card récup de la poubelle donnée par le plateau attention bien l'enlever de la poubelle ou carte piocher
         if (card.getValeur()<=0){
-            //lancer une méthode qui joue correctement avec ces cartes
+            chooseWhereToReplace(card);
         }
         else if (getColumnIndexSameCard(card) != -1 ){
             int numColumn = getColumnIndexSameCard(card);
@@ -20,7 +20,7 @@ public class SmartPlayer extends Player{
             }
         }
         else if(card.getValeur()<5){
-            //lance une méthode pour dans ce cas
+            chooseWhereToReplace(card);
         }
         else{
             poubelle.addCard(card);
@@ -32,7 +32,7 @@ public class SmartPlayer extends Player{
 
     public void chooseKeepOrNotDeck(SkyjoCard card){//card piocher / presque meme méthode qu'au dessus => améliorer
         if (card.getValeur()<=0){
-            //lancer une méthode qui joue correctement avec ces cartes
+            chooseWhereToReplace(card);
         }
         else if (getColumnIndexSameCard(card) != -1 ){
             int numColumn = getColumnIndexSameCard(card);
@@ -44,7 +44,7 @@ public class SmartPlayer extends Player{
             }
         }
         else if(card.getValeur()<5){
-            //lance une méthode pour dans ce cas
+            chooseWhereToReplace(card);
         }
         else{
             poubelle.addCard(card);
@@ -130,27 +130,52 @@ public class SmartPlayer extends Player{
         }
     }
 
-    public void chooseCardToReplace(){ //a utiliser if toutes les colonnes ont au moins une carte connue
+    public void replaceHigherCard(SkyjoCard currCard){
         SkyjoCard highCard=null;
-        int columnHighCard;// faire en sorte de trouver les index 
-        int indexHighCard;
+        int columnHighCard=0; 
+        int indexHighCard=0;
         for (int i=0; i<mainConnu.size();i++){
             SkyjoCard highCardColumn=mainConnu.get(i)[0];
+            int tmpIndex=0;
             for(int j=0; j<mainConnu.get(i).length;j++){
-                SkyjoCard currCard = mainConnu.get(i)[j];
+                SkyjoCard tmpCard = mainConnu.get(i)[j];
                 int occCurrCard=cardOccurenceColumn(currCard, mainConnu.get(i));
-                if (occCurrCard==1 && currCard.getValeur()>highCardColumn.getValeur()){
-                    highCardColumn=currCard;
-                    indexHighCard=j;
+                if (occCurrCard==1 && tmpCard.getValeur()>highCardColumn.getValeur()){ // que faire dans le cas ou occ==2
+                    highCardColumn=tmpCard;
+                    tmpIndex=j;
                 }
             }
             if (highCardColumn.getValeur()>highCard.getValeur()){
                 highCard=highCardColumn;
-                indexHighCard=i;
+                columnHighCard = i;
+                indexHighCard=tmpIndex;
             }
         }
 
-        replaceCard(0, 0, highCard);
+        SkyjoCard CardToDelete=replaceCard(columnHighCard, indexHighCard,currCard);
+        poubelle.addCard(CardToDelete);
     }
+
+    public int whereEmptyColumn(){
+        for (int i =0; i<mainConnu.size(); i++){
+            if (nbKnownCard(mainConnu.get(i))==0){
+                return i; 
+            }
+        }
+        return -1;
+    }
+
+    public void chooseWhereToReplace(SkyjoCard card){
+        if (whereEmptyColumn()==-1){
+            replaceHigherCard(card);
+        }
+        else{
+            int randomIndex= rd.nextInt(0,mainConnu.get(0).length);
+            SkyjoCard CardToDelete=replaceCard(whereEmptyColumn(), randomIndex,card);
+            poubelle.addCard(CardToDelete);
+        }
+    }
+
+
 
 }

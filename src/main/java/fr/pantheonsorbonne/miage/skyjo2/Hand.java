@@ -36,6 +36,15 @@ public class Hand {
         return cardToDelete;
     }
 
+    public void showHand(){
+        for(int j=0; j<hand.get(0).length;j++){
+            for (int i=0; i<hand.size();i++){
+                System.out.print(hand.get(i)[j]+"           ");
+            }
+            System.out.println("");
+
+        }
+    }
 
 
 

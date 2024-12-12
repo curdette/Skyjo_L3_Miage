@@ -27,8 +27,8 @@ public abstract class Player {
             mainConnu.add(i,column);
         }
         for (int k=0;k<2;k++){
-            int i= rd.nextInt(0,4);
-            int j= rd.nextInt(0,3);
+            int i= rd.nextInt(0,mainConnu.size());
+            int j= rd.nextInt(0,mainConnu.get(0).length);
             mainConnu.get(i)[j]=this.main.getCard(i, j);
         }
         return mainConnu; 
@@ -37,10 +37,16 @@ public abstract class Player {
     public int nbKnownCard(){
         int nb=0;
         for (SkyjoCard[] column : mainConnu){
-            for (SkyjoCard card : column){
-                if (card != null){
-                    nb+=1;
-                }
+            nb+=nbKnownCard(column);
+        }
+        return nb;
+    }
+
+    public int nbKnownCard(SkyjoCard[] column){
+        int nb=0;
+        for (SkyjoCard card : column){
+            if (card != null){
+                nb+=1;
             }
         }
         return nb;

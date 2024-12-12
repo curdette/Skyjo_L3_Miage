@@ -10,7 +10,7 @@ public class Plateau {
         Plateau.poubelle=new Poubelle(deck);
         Plateau.j1=new SmartPlayer(deck, poubelle);
         Plateau.j2=new SmartPlayer(deck, poubelle);
-
+        j1.main.showHand();
     }
 
 
