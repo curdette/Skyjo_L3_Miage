@@ -1,5 +1,6 @@
-package fr.pantheonsorbonne.miage.jeuskyjo;
+package fr.pantheonsorbonne.miage.skyjo2;
 
+//import paquet.Valeur;
 
 public class SkyjoCard {
 
@@ -10,7 +11,7 @@ public class SkyjoCard {
     }
 
     public int getValeur(){
-        return this.valeur.getValeur();
+        return this.getValeur();
     }
 
     public String toString(){

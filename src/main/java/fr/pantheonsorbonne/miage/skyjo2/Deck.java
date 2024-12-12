@@ -1,4 +1,4 @@
-package fr.pantheonsorbonne.miage.jeuskyjo;
+package fr.pantheonsorbonne.miage.skyjo2;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,19 +8,17 @@ import java.util.List;
 
 public class Deck {
 
-    private static List<SkyjoCard> pioche;
-    private static final int nbMoinsDeux = 5;
-    private static final int nbZero = 15;
-    private static final int nbCarteClassique = 10;
-    private static SkyjoCard poubelle;
+    private List<SkyjoCard> pioche;
+    private final int nbMoinsDeux = 5;
+    private final int nbZero = 15;
+    private final int nbCarteClassique = 10;
     
     public Deck(){
         this.pioche=makePioche();
         Collections.shuffle(pioche);
-        this.poubelle=piocher();
     }
 
-    public static List<SkyjoCard> makePioche(){
+    public List<SkyjoCard> makePioche(){
         List<SkyjoCard> pioche = new ArrayList<>();
         for (Valeur val : Valeur.values()){
             if (val.getValeur()==-2){
@@ -43,34 +41,23 @@ public class Deck {
 
     }
 
-    public static SkyjoCard piocher(){
+    public SkyjoCard piocher(){
         SkyjoCard card=pioche.get(0);
         pioche.remove(0);
         return  card ; 
     }
 
-
-    public static int compterCarteParValeur(int valeurCarte){
-        int compteur = 0;
-        for (SkyjoCard carte : pioche) {
-            if (carte.getValeur() == valeurCarte) {
-                compteur = compteur + 1;
-            }
-        }
-        return compteur;
+    public int getMediane(){//ne fonctionne pas pour l'instant
+        int medCard=pioche.size()/2;
+        pioche.sort(null);
+        SkyjoCard med = pioche.get(medCard);
+        Collections.shuffle(pioche);
+        return med.getValeur();
     }
 
+    
 
-    public static void main(String[] args){
-
-        Deck d = new Deck ();
-
-        SkyjoCard essaie = d.piocher();
-        System.out.println(essaie.toString());
-
-        Joueur j1=new Joueur(d);
-        
-    }
+    
 
 
 }

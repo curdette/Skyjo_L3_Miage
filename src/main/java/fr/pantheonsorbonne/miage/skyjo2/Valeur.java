@@ -1,4 +1,5 @@
-package fr.pantheonsorbonne.miage.jeuskyjo;
+package fr.pantheonsorbonne.miage.skyjo2;
+
 public enum Valeur {
     DEUX_NEG(-2),
     UN_NEG(-1),
