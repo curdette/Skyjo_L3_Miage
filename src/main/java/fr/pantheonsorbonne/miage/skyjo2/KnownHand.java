@@ -22,11 +22,14 @@ public class KnownHand {
             SkyjoCard[] column=new SkyjoCard[3];
             knownHand.add(i,column);
         }
-        do{
-            int i= rd.nextInt(0,knownHand.size());
-            int j= rd.nextInt(0,knownHand.get(0).length);
-            knownHand.get(i)[j]=this.hand.getCard(i, j);
-        }while( nbKnownCard() != 2);
+        
+        int i= rd.nextInt(0,knownHand.size()); //todo améliorer
+        int j= rd.nextInt(0,knownHand.get(0).length);
+        knownHand.get(i)[j]=this.hand.getCard(i, j);
+        knownHand.get(0)[0]=this.hand.getCard(0, 0);
+        knownHand.get(1)[1]=this.hand.getCard(1, 1);//a effacer jsute pour tester
+        knownHand.get(2)[2]=this.hand.getCard(2, 2);
+        
         return knownHand; 
     }
 
@@ -82,17 +85,21 @@ public class KnownHand {
         return numColumnMax;
     }
 
-    public int cardOccurenceColumn(SkyjoCard card, SkyjoCard[] column){
+    public int cardOccurenceColumn(SkyjoCard card, SkyjoCard[] column){ 
         int nbSameCard=0;
-        for (SkyjoCard c : column){
-            if (c==null){
-                break;
+        for (int i=0;i<column.length;i++){
+            if (column[i]==null){
+                continue;
             }
-            else if(c.getValeur()==card.getValeur()){
+            else if(column[i].getValeur()==card.getValeur()){
                 nbSameCard+=1;
             }
         }
         return nbSameCard;
+    }
+
+    public int getHighCard(SkyjoCard[] column){ 
+        return 0;
     }
 
     

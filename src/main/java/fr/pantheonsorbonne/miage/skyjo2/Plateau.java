@@ -5,14 +5,20 @@ public class Plateau {
     static Deck deck; 
     static Poubelle poubelle;
 
+   
+
     public Plateau(){
         Plateau.deck=new Deck();
         Plateau.poubelle=new Poubelle(deck);
         Plateau.j1=new SmartPlayer(deck, poubelle); //faire une boucle avec une variable nb de joueur
         Plateau.j2=new SmartPlayer(deck, poubelle);
-        j1.main.showHand();
-        j1.knownHand.showHand();
-        //j1.jouer();
+        
+        for (int i=0; i<6 ;i++){
+            j1.jouer();
+            System.out.println("  ");
+            j2.jouer();
+        }
+        
     }
 
 

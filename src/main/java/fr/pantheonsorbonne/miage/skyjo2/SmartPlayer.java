@@ -7,17 +7,23 @@ public class SmartPlayer extends Player{
     }
 
     public void chooseKeepOrNot(SkyjoCard card, boolean isFromTrash){//card récup de la poubelle donnée par le plateau attention bien l'enlever de la poubelle
-    System.out.println(card.toString());    
-    if (card.getValeur()<=0){
-            chooseWhereToReplace(card);
+        System.out.println(" ");
+        System.out.println(card.toString());   
+        System.out.println(" "); 
+
+        if (card.getValeur()<=0){
+                chooseWhereToReplace(card);
         }
+
         else if (knownHand.getIndexColumnSameCard(card) != -1 ){
+            System.out.println("on essaie de faire une colonne");
             int numColumn = knownHand.getIndexColumnSameCard(card);
             if(knownHand.cardOccurenceColumn(card,knownHand.get(numColumn) ) == 2){
                 deleteColumn(card, numColumn);
             }
             else{
-                tryMakeColumn(card,numColumn);
+                System.out.println("tryMakeColumn");
+                tryMakeColumn(card,numColumn,isFromTrash);
             }
         }
         else if(card.getValeur()<5){
@@ -45,19 +51,24 @@ public class SmartPlayer extends Player{
             chooseKeepOrNot(d.piocher(),false);
         }
         else{
+            if(bestIndex==-1){
+                bestIndex=indexOthersCards[0];
+            }
             SkyjoCard cardToDelete=replaceCard(numColumn, bestIndex, card);
             poubelle.addCard(cardToDelete);
         }
     }
 
-    public void tryMakeColumn(SkyjoCard card, int numColumn){
-        if (knownHand.nbKnownCard()>7 ){
-            poubelle.addCard(card);
-            chooseKeepOrNot(d.piocher(),false);
-        }
-        else if(card.getValeur()>5){
-            poubelle.addCard(card);
-            chooseKeepOrNot(d.piocher(),false);
+    public void tryMakeColumn(SkyjoCard card, int numColumn, boolean isFromTrash){
+        if (knownHand.nbKnownCard()>7 && card.getValeur()>5){
+            if(isFromTrash){
+                poubelle.addCard(card);
+                chooseKeepOrNot(d.piocher(),false);
+            }
+            else{
+                //retourner un carte
+            }
+            
         }
         else{
             makeColumn(card, numColumn);
@@ -94,31 +105,7 @@ public class SmartPlayer extends Player{
         }
     }
 
-    public void replaceHigherCard(SkyjoCard currCard){
-        SkyjoCard highCard=null;
-        int columnHighCard=0; 
-        int indexHighCard=0;
-        for (int i=0; i<knownHand.size();i++){
-            SkyjoCard highCardColumn=knownHand.get(i)[0];
-            int tmpIndex=0;
-            for(int j=0; j<knownHand.get(i).length;j++){
-                SkyjoCard tmpCard = knownHand.get(i)[j];
-                int occCurrCard=knownHand.cardOccurenceColumn(currCard, knownHand.get(i));
-                if (occCurrCard==1 && tmpCard.getValeur()>highCardColumn.getValeur()){ // que faire dans le cas ou occ==2
-                    highCardColumn=tmpCard;
-                    tmpIndex=j;
-                }
-            }
-            if (highCardColumn.getValeur()>highCard.getValeur()){
-                highCard=highCardColumn;
-                columnHighCard = i;
-                indexHighCard=tmpIndex;
-            }
-        }
-
-        SkyjoCard CardToDelete=replaceCard(columnHighCard, indexHighCard,currCard);
-        poubelle.addCard(CardToDelete);
-    }
+    
 
     public int whereEmptyColumn(){
         for (int i =0; i<knownHand.size(); i++){
@@ -129,9 +116,10 @@ public class SmartPlayer extends Player{
         return -1;
     }
 
-    public void chooseWhereToReplace(SkyjoCard card){
-        if (whereEmptyColumn()==-1){
-            replaceHigherCard(card);
+    public void chooseWhereToReplace(SkyjoCard card){//très bof ... améliorer pour <=0
+        if (whereEmptyColumn() == -1){
+             //si il reste plus de 5 carte pas connu remplacer là ou s'est vide sinon 
+             //sinon remplacer la plus grande carte pour trouver la plus grande carte trouver l'index de la plus grande carte par colonne puis la plus grande  
         }
         else{
             int randomIndex= rd.nextInt(0,knownHand.get(0).length);

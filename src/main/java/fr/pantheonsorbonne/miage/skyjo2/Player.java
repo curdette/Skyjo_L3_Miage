@@ -40,11 +40,11 @@ public abstract class Player {
     
     public abstract void chooseKeepOrNot(SkyjoCard card, boolean isFromTrash);
 
-    /*public void jouer(){
-        System.out.println("je suis passé par jouer");
-        //chooseKeepOrNot(poubelle.getLastCard(), true);
+    public void jouer(){
         knownHand.showHand();
-    }*/
+        chooseKeepOrNot(poubelle.getLastCard(), true);
+        knownHand.showHand();
+    }
 
     
 
