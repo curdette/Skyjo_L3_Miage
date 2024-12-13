@@ -44,6 +44,7 @@ public class Hand {
             System.out.println("");
 
         }
+        System.out.println("\n");
     }
 
 

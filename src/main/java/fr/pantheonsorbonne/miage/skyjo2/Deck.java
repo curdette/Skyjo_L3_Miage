@@ -53,9 +53,4 @@ public class Deck {
         return med.getValeur();
     }
 
-    
-
-    
-
-
 }

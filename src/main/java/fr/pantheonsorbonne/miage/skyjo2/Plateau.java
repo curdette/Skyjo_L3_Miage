@@ -8,9 +8,11 @@ public class Plateau {
     public Plateau(){
         Plateau.deck=new Deck();
         Plateau.poubelle=new Poubelle(deck);
-        Plateau.j1=new SmartPlayer(deck, poubelle);
+        Plateau.j1=new SmartPlayer(deck, poubelle); //faire une boucle avec une variable nb de joueur
         Plateau.j2=new SmartPlayer(deck, poubelle);
         j1.main.showHand();
+        j1.knownHand.showHand();
+        //j1.jouer();
     }
 
 

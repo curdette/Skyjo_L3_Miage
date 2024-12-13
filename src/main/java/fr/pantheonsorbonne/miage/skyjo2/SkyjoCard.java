@@ -9,12 +9,11 @@ public class SkyjoCard {
     }
 
     public int getValeur(){
-        return this.getValeur();
+        return this.valeur.getValeur();
     }
 
     public String toString(){
         return valeur.toString();
     }
-    //todo implémenter equals
 
 }

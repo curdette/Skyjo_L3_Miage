@@ -6,13 +6,14 @@ public class SmartPlayer extends Player{
         super(d, poubelle);
     }
 
-    public void chooseKeepOrNotTrash(SkyjoCard card){//card récup de la poubelle donnée par le plateau attention bien l'enlever de la poubelle ou carte piocher
-        if (card.getValeur()<=0){
+    public void chooseKeepOrNot(SkyjoCard card, boolean isFromTrash){//card récup de la poubelle donnée par le plateau attention bien l'enlever de la poubelle
+    System.out.println(card.toString());    
+    if (card.getValeur()<=0){
             chooseWhereToReplace(card);
         }
-        else if (getColumnIndexSameCard(card) != -1 ){
-            int numColumn = getColumnIndexSameCard(card);
-            if(cardOccurenceColumn(card,mainConnu.get(numColumn) ) == 2){
+        else if (knownHand.getIndexColumnSameCard(card) != -1 ){
+            int numColumn = knownHand.getIndexColumnSameCard(card);
+            if(knownHand.cardOccurenceColumn(card,knownHand.get(numColumn) ) == 2){
                 deleteColumn(card, numColumn);
             }
             else{
@@ -24,54 +25,24 @@ public class SmartPlayer extends Player{
         }
         else{
             poubelle.addCard(card);
-            chooseKeepOrNotDeck(d.piocher());
-        }
-
-    }
-
-
-    public void chooseKeepOrNotDeck(SkyjoCard card){//card piocher / presque meme méthode qu'au dessus => améliorer
-        if (card.getValeur()<=0){
-            chooseWhereToReplace(card);
-        }
-        else if (getColumnIndexSameCard(card) != -1 ){
-            int numColumn = getColumnIndexSameCard(card);
-            if(cardOccurenceColumn(card,mainConnu.get(numColumn) ) == 2){
-                deleteColumn(card, numColumn);
+            if(isFromTrash){
+                chooseKeepOrNot(d.piocher(),false);
             }
             else{
-                tryMakeColumn(card,numColumn);
+                //retourner une nouvelle carte
             }
-        }
-        else if(card.getValeur()<5){
-            chooseWhereToReplace(card);
-        }
-        else{
-            poubelle.addCard(card);
-            //retourner une nouvelle carte 
+            
         }
 
-    }
-
-    
-
-    public void deleteColumn(SkyjoCard card, int numColumn){
-        SkyjoCard[] column=mainConnu.get(numColumn);
-        for (int i=0; i<column.length; i++){
-            poubelle.addCard(column[i]);
-        }
-        mainConnu.remove(numColumn);
-        main.deleteColumn(numColumn);
-        poubelle.addCard(card);
     }
 
     public void makeColumn(SkyjoCard card ,int numColumn){ 
-        SkyjoCard[] column=mainConnu.get(numColumn);
+        SkyjoCard[] column=knownHand.get(numColumn);
         int[] indexOthersCards=getIndexOtherCard(card,column);
         int bestIndex=chooseBestIndex(indexOthersCards,column);
         if(bestIndex==-1 && column[indexOthersCards[0]].getValeur()<card.getValeur()){
             poubelle.addCard(card);
-            chooseKeepOrNotDeck(d.piocher());
+            chooseKeepOrNot(d.piocher(),false);
         }
         else{
             SkyjoCard cardToDelete=replaceCard(numColumn, bestIndex, card);
@@ -80,25 +51,24 @@ public class SmartPlayer extends Player{
     }
 
     public void tryMakeColumn(SkyjoCard card, int numColumn){
-        if (nbKnownCard()>7 ){
+        if (knownHand.nbKnownCard()>7 ){
             poubelle.addCard(card);
-            chooseKeepOrNotDeck(d.piocher());
+            chooseKeepOrNot(d.piocher(),false);
         }
         else if(card.getValeur()>5){
             poubelle.addCard(card);
-            chooseKeepOrNotDeck(d.piocher());
+            chooseKeepOrNot(d.piocher(),false);
         }
         else{
             makeColumn(card, numColumn);
         }
-        
     }
 
     public int[] getIndexOtherCard(SkyjoCard card, SkyjoCard[] column){
         int[] indexTab=new int[2];
         int index=0;
         for (int i =0; i<column.length;i++){
-            if(column[i].equals(card)){
+            if(column[i].getValeur()==card.getValeur()){
                 break;
             }
             indexTab[index]=i;
@@ -113,16 +83,10 @@ public class SmartPlayer extends Player{
         if (card1==null && card2==null){
             return index[0];
         }
-        else if(card1==null){
+        else if(card1==null || card2.getValeur() > card1.getValeur()){
             return index[1];
         }
-        else if(card2==null){
-            return index[0];
-        }
-        else if(card2.getValeur() > card1.getValeur()){
-            return index[1];
-        }
-        else if (card1.getValeur()>card2.getValeur()){
+        else if(card2==null || card1.getValeur()>card2.getValeur()){
             return index[0];
         }
         else{
@@ -134,12 +98,12 @@ public class SmartPlayer extends Player{
         SkyjoCard highCard=null;
         int columnHighCard=0; 
         int indexHighCard=0;
-        for (int i=0; i<mainConnu.size();i++){
-            SkyjoCard highCardColumn=mainConnu.get(i)[0];
+        for (int i=0; i<knownHand.size();i++){
+            SkyjoCard highCardColumn=knownHand.get(i)[0];
             int tmpIndex=0;
-            for(int j=0; j<mainConnu.get(i).length;j++){
-                SkyjoCard tmpCard = mainConnu.get(i)[j];
-                int occCurrCard=cardOccurenceColumn(currCard, mainConnu.get(i));
+            for(int j=0; j<knownHand.get(i).length;j++){
+                SkyjoCard tmpCard = knownHand.get(i)[j];
+                int occCurrCard=knownHand.cardOccurenceColumn(currCard, knownHand.get(i));
                 if (occCurrCard==1 && tmpCard.getValeur()>highCardColumn.getValeur()){ // que faire dans le cas ou occ==2
                     highCardColumn=tmpCard;
                     tmpIndex=j;
@@ -157,8 +121,8 @@ public class SmartPlayer extends Player{
     }
 
     public int whereEmptyColumn(){
-        for (int i =0; i<mainConnu.size(); i++){
-            if (nbKnownCard(mainConnu.get(i))==0){
+        for (int i =0; i<knownHand.size(); i++){
+            if (knownHand.nbKnownCard(knownHand.get(i))==0){
                 return i; 
             }
         }
@@ -170,7 +134,7 @@ public class SmartPlayer extends Player{
             replaceHigherCard(card);
         }
         else{
-            int randomIndex= rd.nextInt(0,mainConnu.get(0).length);
+            int randomIndex= rd.nextInt(0,knownHand.get(0).length);
             SkyjoCard CardToDelete=replaceCard(whereEmptyColumn(), randomIndex,card);
             poubelle.addCard(CardToDelete);
         }

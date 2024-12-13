@@ -1,12 +1,10 @@
 package fr.pantheonsorbonne.miage.skyjo2;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 
 public abstract class Player {
     Hand main;
-    List<SkyjoCard[]> mainConnu=new ArrayList<>();
+    KnownHand knownHand;
     Random rd = new Random();
     Deck d;
     Poubelle poubelle;
@@ -16,74 +14,39 @@ public abstract class Player {
         this.d=d;
         this.poubelle=p;
         this.main=new Hand(d);
-        this.mainConnu=initialiserMainConnu();
+        this.knownHand=new KnownHand(main,poubelle);
     }
 
-        
-    private List<SkyjoCard[]> initialiserMainConnu() {
-        List<SkyjoCard[]> mainConnu = new ArrayList<>();
-        for (int i=0; i<4;i++){
-            SkyjoCard[] column=new SkyjoCard[3];
-            mainConnu.add(i,column);
-        }
-        for (int k=0;k<2;k++){
-            int i= rd.nextInt(0,mainConnu.size());
-            int j= rd.nextInt(0,mainConnu.get(0).length);
-            mainConnu.get(i)[j]=this.main.getCard(i, j);
-        }
-        return mainConnu; 
-    }
-
-    public int nbKnownCard(){
-        int nb=0;
-        for (SkyjoCard[] column : mainConnu){
-            nb+=nbKnownCard(column);
-        }
-        return nb;
-    }
-
-    public int nbKnownCard(SkyjoCard[] column){
-        int nb=0;
-        for (SkyjoCard card : column){
-            if (card != null){
-                nb+=1;
-            }
-        }
-        return nb;
-    }
-    
-    
-    public void showCard(int numColumn, int index){
-        this.mainConnu.get(numColumn)[index]=this.main.getCard(numColumn, index);
+    public void revealCard(int numColumn, int index){
+        this.knownHand.get(numColumn)[index]=this.main.getCard(numColumn, index);
     }
 
     public SkyjoCard replaceCard(int numColumn, int index, SkyjoCard carteRemplacante){
-        this.mainConnu.get(numColumn)[index]=carteRemplacante;
+        this.knownHand.get(numColumn)[index]=carteRemplacante;
         return this.main.remplacerCarte(numColumn,index,carteRemplacante);
         
     }
 
-    public int getColumnIndexSameCard(SkyjoCard card){
-        int maxNb=0;
-        int numColumnMax=-1;
-        for (int i =0; i<mainConnu.size();i++){
-            int nbCard = cardOccurenceColumn(card, mainConnu.get(i));
-            if (nbCard>maxNb){
-                numColumnMax= i;
-            }
+    public void deleteColumn(SkyjoCard card, int numColumn){
+        SkyjoCard[] column=knownHand.get(numColumn);
+        for (int i=0; i<column.length; i++){
+            poubelle.addCard(column[i]);
         }
-        return numColumnMax;
+        knownHand.remove(numColumn);
+        main.deleteColumn(numColumn);
+        poubelle.addCard(card);
     }
 
-    public int cardOccurenceColumn(SkyjoCard card, SkyjoCard[] column){
-        int nbSameCard=0;
-        for (SkyjoCard c : column){
-            if(c.getValeur()==card.getValeur()){
-                nbSameCard+=1;
-            }
-        }
-        return nbSameCard;
-    }
+    
+    public abstract void chooseKeepOrNot(SkyjoCard card, boolean isFromTrash);
+
+    /*public void jouer(){
+        System.out.println("je suis passé par jouer");
+        //chooseKeepOrNot(poubelle.getLastCard(), true);
+        knownHand.showHand();
+    }*/
+
+    
 
     
 }
