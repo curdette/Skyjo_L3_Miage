@@ -3,7 +3,7 @@ import java.util.Random;
 
 
 public abstract class Player {
-    Hand main;
+    Hand hand;
     KnownHand knownHand;
     Random rd = new Random();
     Deck d;
@@ -13,17 +13,13 @@ public abstract class Player {
     public Player(Deck d,Poubelle p){
         this.d=d;
         this.poubelle=p;
-        this.main=new Hand(d);
-        this.knownHand=new KnownHand(main,poubelle);
+        this.hand=new Hand(d);
+        this.knownHand=new KnownHand(hand,poubelle);
     }
 
-    public void revealCard(int numColumn, int index){
-        this.knownHand.get(numColumn)[index]=this.main.getCard(numColumn, index);
-    }
-
-    public SkyjoCard replaceCard(int numColumn, int index, SkyjoCard carteRemplacante){
+    public void replaceCard(int numColumn, int index, SkyjoCard carteRemplacante){
         this.knownHand.get(numColumn)[index]=carteRemplacante;
-        return this.main.remplacerCarte(numColumn,index,carteRemplacante);
+        poubelle.addCard(this.hand.remplacerCarte(numColumn,index,carteRemplacante));
         
     }
 
@@ -33,18 +29,38 @@ public abstract class Player {
             poubelle.addCard(column[i]);
         }
         knownHand.remove(numColumn);
-        main.deleteColumn(numColumn);
+        hand.deleteColumn(numColumn);
         poubelle.addCard(card);
+    }
+
+    public void deleteColumn(int numColumn){
+        SkyjoCard[] column=knownHand.get(numColumn);
+        for (int i=0; i<column.length; i++){
+            poubelle.addCard(column[i]);
+        }
+        knownHand.remove(numColumn);
+        hand.deleteColumn(numColumn);
+    }
+
+    public int countKnownPoint(){
+        int nb=0;
+        for (int i=0; i<knownHand.size();i++){
+            for (int j=0; j<knownHand.get(i).length;j++){
+                if(knownHand.get(i)[j]==null){
+                    continue;
+                }
+                nb+=knownHand.get(i)[j].getValeur();
+            }
+        }
+        return nb;
     }
 
     
     public abstract void chooseKeepOrNot(SkyjoCard card, boolean isFromTrash);
+    public abstract void chooseWhereToReplace(SkyjoCard card);
+    public abstract void revealCard();
 
-    public void jouer(){
-        knownHand.showHand();
-        chooseKeepOrNot(poubelle.getLastCard(), true);
-        knownHand.showHand();
-    }
+    public abstract void jouer();
 
     
 

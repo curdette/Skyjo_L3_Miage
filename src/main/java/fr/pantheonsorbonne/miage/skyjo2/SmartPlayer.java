@@ -35,7 +35,7 @@ public class SmartPlayer extends Player{
                 chooseKeepOrNot(d.piocher(),false);
             }
             else{
-                //retourner une nouvelle carte
+                revealCard();
             }
             
         }
@@ -46,7 +46,7 @@ public class SmartPlayer extends Player{
         SkyjoCard[] column=knownHand.get(numColumn);
         int[] indexOthersCards=getIndexOtherCard(card,column);
         int bestIndex=chooseBestIndex(indexOthersCards,column);
-        if(bestIndex==-1 && column[indexOthersCards[0]].getValeur()<card.getValeur()){
+        if(bestIndex==-1 && knownHand.getValeur(column[indexOthersCards[0]])<card.getValeur()){
             poubelle.addCard(card);
             chooseKeepOrNot(d.piocher(),false);
         }
@@ -54,8 +54,7 @@ public class SmartPlayer extends Player{
             if(bestIndex==-1){
                 bestIndex=indexOthersCards[0];
             }
-            SkyjoCard cardToDelete=replaceCard(numColumn, bestIndex, card);
-            poubelle.addCard(cardToDelete);
+            replaceCard(numColumn, bestIndex, card);
         }
     }
 
@@ -66,7 +65,7 @@ public class SmartPlayer extends Player{
                 chooseKeepOrNot(d.piocher(),false);
             }
             else{
-                //retourner un carte
+                revealCard();
             }
             
         }
@@ -122,10 +121,24 @@ public class SmartPlayer extends Player{
              //sinon remplacer la plus grande carte pour trouver la plus grande carte trouver l'index de la plus grande carte par colonne puis la plus grande  
         }
         else{
-            int randomIndex= rd.nextInt(0,knownHand.get(0).length);
-            SkyjoCard CardToDelete=replaceCard(whereEmptyColumn(), randomIndex,card);
-            poubelle.addCard(CardToDelete);
+            revealCard(); 
         }
+    }
+
+    public void revealCard(){//version dumb
+        int i;
+        int j;
+        do {
+            i =rd.nextInt(0,knownHand.size());
+            j=rd.nextInt(0,knownHand.get(0).length);
+        }while(knownHand.get(i)[j]==null);
+        knownHand.get(i)[j]=hand.getCard(i, j);//mettre les memes méthodes pour hand et knownhand et faire de l'héritage
+    }
+
+    public void jouer(){
+        knownHand.showHand();
+        chooseKeepOrNot(poubelle.getLastCard(), true);
+        knownHand.showHand();
     }
 
 

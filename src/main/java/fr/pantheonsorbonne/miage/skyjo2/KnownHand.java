@@ -2,11 +2,9 @@ package fr.pantheonsorbonne.miage.skyjo2;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class KnownHand {
     List<SkyjoCard[]> knownHand=new ArrayList<>();
-    Random rd = new Random();
     Hand hand;
 
     
@@ -23,12 +21,9 @@ public class KnownHand {
             knownHand.add(i,column);
         }
         
-        int i= rd.nextInt(0,knownHand.size()); //todo améliorer
-        int j= rd.nextInt(0,knownHand.get(0).length);
-        knownHand.get(i)[j]=this.hand.getCard(i, j);
         knownHand.get(0)[0]=this.hand.getCard(0, 0);
-        knownHand.get(1)[1]=this.hand.getCard(1, 1);//a effacer jsute pour tester
-        knownHand.get(2)[2]=this.hand.getCard(2, 2);
+        knownHand.get(1)[1]=this.hand.getCard(1, 1);
+        
         
         return knownHand; 
     }
@@ -38,13 +33,13 @@ public class KnownHand {
         for (SkyjoCard[] column : knownHand){
             nb+=nbKnownCard(column);
         }
-        return nb;
+        return 12- nb;
     }
 
     public int nbKnownCard(SkyjoCard[] column){
         int nb=0;
         for (SkyjoCard card : column){
-            if (card != null){
+            if (card == null){
                 nb+=1;
             }
         }
@@ -98,8 +93,15 @@ public class KnownHand {
         return nbSameCard;
     }
 
-    public int getHighCard(SkyjoCard[] column){ 
+    public int getHighCard(SkyjoCard[] column){ //to do implémenter si carte null continue sinon comparer maintenant facile vu q'un co la carte 00
         return 0;
+    }
+
+    public int getValeur(SkyjoCard card){//voire si vraiment utile
+        if(card==null){
+            return -3;
+        }
+        return card.getValeur();
     }
 
     
